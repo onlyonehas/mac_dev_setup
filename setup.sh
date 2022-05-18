@@ -16,9 +16,10 @@ fi
 
 brew update
 
-# ohmyzsh and zsh autosuggestions
+# ohmyzsh, zsh-autosuggestions and Zsh-z
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/agkozak/zsh-z $ZSH_CUSTOM/plugins/zsh-z
 
 # nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
@@ -35,12 +36,9 @@ brew install starship
 brew install awscli
 brew install redis
 brew install java
-npm i -g np
-
 brew install remotemobprogramming/brew/mob
-
-# upgrade to latest version
 brew upgrade remotemobprogramming/brew/mob
+npm i -g np
 
 # fonts.
 brew tap bramstein/webfonttools
