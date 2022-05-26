@@ -38,7 +38,7 @@ to keep your browser customisation - bookmarks, extensions etc
 Vs Code Sync:
 You can turn on Settings Sync using the Turn On Settings Sync... entry in the Manage gear menu at the bottom of the Activity Bar.
 
-https://code.visualstudio.com/docs/editor/settings-sync
+> https://code.visualstudio.com/docs/editor/settings-sync
 
 ### To add in `.zshrc`
 
@@ -46,6 +46,8 @@ https://code.visualstudio.com/docs/editor/settings-sync
 plugins=(z, zsh-autosuggestions)
 eval "$(starship init zsh)"
 ```
+
+---
 
 ## Github machine setup
 
