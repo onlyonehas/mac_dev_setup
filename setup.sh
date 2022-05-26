@@ -25,7 +25,7 @@ git clone https://github.com/agkozak/zsh-z $ZSH_CUSTOM/plugins/zsh-z
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
 # Mac software update 
-//softwareupdate --all --install --force
+# softwareupdate --all --install --force
 
 # essential non-gui apps
 brew install node
@@ -42,11 +42,13 @@ npm i -g np
 
 # fonts.
 brew tap bramstein/webfonttools
+brew tap homebrew/cask-fonts
 brew install sfnt2woff
 brew install sfnt2woff-zopfli
 brew install woff2
 
 # essential apps - gui
+brew install --cask --appdir="/Applications" font-hack-nerd-font
 brew install --cask --appdir="/Applications" alfred
 brew install --cask --appdir="~/Applications" iterm2
 brew install --cask --appdir="/Applications" google-chrome
@@ -56,9 +58,12 @@ brew install --cask --appdir="/Applications" numi
 brew install --cask --appdir="/Applications" zoom.us
 brew install --cask --appdir="/Applications" microsoft-outlook
 brew install --cask --appdir="/Applications" visual-studio-code
-brew install --cask --appdir="/Applications" fig
 brew install --cask --appdir="/Applications" 1clipboard
 brew install --cask --appdir="/Applications" gpg-suite
 brew install --cask --appdir="/Applications" sourcetree
+brew install --cask --appdir="/Applications" flux
+brew install --cask --appdir="/Applications" cheatsheet
+brew install --cask --appdir="/Applications" fig
+fig settings autocomplete.immediatelyExecuteAfterSpace true
 
 brew cleanup
