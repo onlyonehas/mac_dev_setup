@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
+# Mac software update 
+# softwareupdate --all --install --force
+
 # Xcode https://developer.apple.com/download/all/?q=command%20line%20tools
+# should install git by default
+# xcode-select --install
 
 # administrator access
 sudo -v
@@ -23,9 +28,6 @@ git clone https://github.com/agkozak/zsh-z $ZSH_CUSTOM/plugins/zsh-z
 
 # nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-# Mac software update 
-# softwareupdate --all --install --force
 
 # essential non-gui apps
 brew install node
