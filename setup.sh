@@ -20,7 +20,7 @@ if test ! $(which brew); then
 fi
 
 # Add homebrew to path
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/hassanabbas/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 brew update
