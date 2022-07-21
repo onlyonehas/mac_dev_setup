@@ -19,6 +19,10 @@ if test ! $(which brew); then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
+# Add homebrew to path
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/hassanabbas/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 brew update
 
 # ohmyzsh, zsh-autosuggestions and Zsh-z
