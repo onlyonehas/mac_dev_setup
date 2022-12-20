@@ -1,33 +1,19 @@
 # Fig pre block. Keep at the top of this file.
 . "$HOME/.fig/shell/zshrc.pre.zsh"
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="agnoster"
 
-# Which plugins would you like to load?
+# zsh plugins
 plugins=(
 git
 zsh-autosuggestions
 zsh-z
 )
 
-source $ZSH/oh-my-zsh.sh
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-
 eval "$(starship init zsh)"
+source $ZSH/oh-my-zsh.sh
 
 # git
 function branch { git checkout -b $@}
@@ -41,7 +27,9 @@ alias main="git checkout main && pull"
 alias gitreset="git reset --hard"
 alias goback="git checkout -"
 alias undocommit="git reset --soft HEAD~1"
+alias undoLastcommit="git push -f origin HEAD^:master"
 alias gh="open \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
+alias gitlog="git log --graph --all --decorate --oneline"
 
 # directory
 alias sites="cd ~/sites"
