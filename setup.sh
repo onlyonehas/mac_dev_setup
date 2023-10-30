@@ -5,7 +5,7 @@
 
 # Xcode https://developer.apple.com/download/all/?q=command%20line%20tools
 # should install git by default
-# xcode-select --install
+xcode-select --install
 
 # administrator access
 sudo -v

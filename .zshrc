@@ -27,7 +27,33 @@ alias main="git checkout main && pull"
 alias gitreset="git reset --hard"
 alias goback="git checkout -"
 alias undocommit="git reset --soft HEAD~1"
-alias undoLastcommit="git push -f origin HEAD^:master"
+alias deletelastcommit='gitdeletecommit() { \
+  echo "This will delete the last $1 commit(s) permanently.";
+  read -p "Are you sure? (y/n): " confirm;
+  if [ "$confirm" == "y" ]; then
+    git branch backup-$(date +"%Y%m%d%H%M%S") HEAD;
+    git reset --hard HEAD~$1;
+  else
+    echo "Deletion cancelled.";
+  fi;
+  unset -f gitdeletecommit;
+}; gitdeletecommit'
+
+deletecommitbyhash() {
+  local commit_hash="$1"
+  local current_branch="$(git rev-parse --abbrev-ref HEAD)"  # Get the current branch name
+  echo "This will delete the commit with hash: $commit_hash permanently."
+
+  read -p "Are you sure? (y/n): " confirm
+  if [ "$confirm" == "y" ]; then
+    git checkout main  # Switch to the master branch
+    git branch "backup-$(date +"%Y%m%d%H%M%S")" "$commit_hash"  # Create the backup branch
+    git checkout "$current_branch"  # Switch back to the original branch
+    git reset --hard "$commit_hash"  # Delete the commit on the original branch
+  else
+    echo "Deletion cancelled."
+  fi
+}
 alias gh="open \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
 alias gitlog="git log --graph --all --decorate --oneline"
 
@@ -87,14 +113,9 @@ function awsdev() {
   open "" # <- REPLACE URL HERE 
 }
 
-function nls() {
-  echo npm ls $1
-  npm ls '\@ibl/$1'
-}
-
 function clone() {
-      git clone git@github.com:bbc/$1.git
-      cd $1
+  git clone git@github.com:onlyonehas/$1.git
+  cd $1
 }
 
 function go() {

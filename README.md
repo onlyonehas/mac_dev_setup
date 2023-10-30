@@ -5,9 +5,10 @@
 ## Description
 
 On many occassions, I had to change laptops, which meant
-I had to install **everything** again from scratch.
+I had to install ALL the things in the world, 
+like **everything** again from scratch.
 
-_So_ wrote this basic script to automate the process
+_So_... wrote this basic script to automate the process.
 
 ## Prerequisite
 
@@ -22,6 +23,8 @@ Install x-code which contains dev env for mac
 ```
 chmod 755 setup.sh
 ./setup.sh
+
+
 ```
 
 ## Still TO DO:
@@ -30,6 +33,7 @@ chmod 755 setup.sh
 - [ ] Store secrets ie .aws, cers
 - [ ] Hidden script to move/apply secrets
 - [ ] Settings for vscode
+- [ ] Alfred shortcuts 
 
 Google Chrome:
 Ensure to sign in and turn on sync in Chrome
