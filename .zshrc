@@ -9,7 +9,7 @@ ZSH_THEME="agnoster"
 plugins=(
 git
 zsh-autosuggestions
-zsh-z
+z
 )
 
 eval "$(starship init zsh)"
@@ -27,6 +27,7 @@ alias main="git checkout main && pull"
 alias gitreset="git reset --hard"
 alias goback="git checkout -"
 alias undocommit="git reset --soft HEAD~1"
+alias viewbranches='git branch --all'
 alias deletelastcommit='gitdeletecommit() { \
   echo "This will delete the last $1 commit(s) permanently.";
   read -p "Are you sure? (y/n): " confirm;
@@ -63,8 +64,12 @@ alias documents="cd ~/Documents"
 alias downloads="cd ~/Downloads"
 alias back="cd -"
 alias sourcealias="source ~/.zshrc"
-alias openalias="vim ~/.zshrc"
+alias openalias="code ~/.zshrc"
 alias codealias="code ~/.zshrc"
+alias openstarship="code ~/.config/starship.toml"
+alias vs="code . -n"
+alias gobackf="cd -"
+alias bashfiles='code ~/sites/bashfiles'
 
 # npm
 alias t="npm t"
@@ -120,13 +125,14 @@ function clone() {
 
 function go() {
   sites
-  if [ -d "$1" ]; then
-    echo "Directory found \n"
-    echo "Now in: /sites/$1"
-    cd $1 && git pull 
+  local dir=$(z "$1" -e)
+  if [ "$dir" ]; then
+    echo "Directory found"
+    z "$1" >/dev/null || return
+    nvm use && git pull
   else
-    echo "cloning repo $1"
-    clone $1
+    echo "Cloning repo $1"
+    clone "$1"
   fi
 }
 
