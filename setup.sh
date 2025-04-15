@@ -42,8 +42,6 @@ brew install starship
 brew install awscli
 brew install redis
 brew install java
-brew install remotemobprogramming/brew/mob
-brew upgrade remotemobprogramming/brew/mob
 npm i -g np
 
 # fonts.
@@ -56,21 +54,24 @@ brew install woff2
 # essential apps - gui
 brew install --cask --appdir="/Applications" font-hack-nerd-font
 brew install --cask --appdir="/Applications" alfred
-brew install --cask --appdir="~/Applications" iterm2
+brew install --cask --appdir="~/Applications" warp
 brew install --cask --appdir="/Applications" google-chrome
 brew install --cask --appdir="/Applications" firefox
 brew install --cask --appdir="/Applications" slack
 brew install --cask --appdir="/Applications" numi
 brew install --cask --appdir="/Applications" zoom.us
-brew install --cask --appdir="/Applications" microsoft-outlook
 brew install --cask --appdir="/Applications" visual-studio-code
 brew install --cask --appdir="/Applications" maccy
-# brew install --cask --appdir="/Applications" 1clipboard
 brew install --cask --appdir="/Applications" gpg-suite
-brew install --cask --appdir="/Applications" sourcetree
 brew install --cask --appdir="/Applications" flux
 brew install --cask --appdir="/Applications" cheatsheet
-brew install --cask --appdir="/Applications" fig
-fig settings autocomplete.immediatelyExecuteAfterSpace true
+brew install --cask --appdir="/Applications" microsoft-outlook
 
 brew cleanup
+
+# brew install remotemobprogramming/brew/mob
+# brew upgrade remotemobprogramming/brew/mob
+# brew install --cask --appdir="/Applications" 1clipboard
+# brew install --cask --appdir="/Applications" sourcetree
+# brew install --cask --appdir="/Applications" fig
+# fig settings autocomplete.immediatelyExecuteAfterSpace true
