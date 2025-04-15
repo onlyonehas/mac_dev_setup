@@ -21,22 +21,11 @@ else
 fi
 
 # Git aliases and functions
-# Function to create and switch to a new branch
-function branch() {
-  git checkout -b "$@" || echo "Error: Unable to create branch."
-}
-
-# Function to checkout an existing branch
-function checkout() {
-  git checkout "$@" || echo "Error: Unable to checkout branch."
-}
-
-# Commit changes with a message
-function commit() {
-  git add . && git commit -a -m "$@" || echo "Error: Commit failed."
-}
-
+function branch { git checkout -b $@}
+function checkout { git checkout $@}
+function commit { git add . && git commit -a -m $@ }
 alias pull="git fetch && git pull"
+alias pushup="git push --set-upstream origin"
 alias push="git push"
 alias status="git status"
 alias master="git checkout master && pull"
@@ -46,6 +35,17 @@ alias goback="git checkout -"
 alias undocommit="git reset --soft HEAD~1"
 alias viewbranches="git branch --all"
 alias gitlog="git log --graph --all --decorate --oneline"
+
+function pr() {
+  local current_branch="$(git rev-parse --abbrev-ref HEAD)"
+  open https://github.com/bbc/$(cmpname)/pull/new/${current_branch}
+}
+
+function gobackanddelete() {
+  local folderName="$(cmpname)"
+  echo "going back, deleting then going back again $folderName"
+  cd .. && rm -rf $folderName && go $folderName
+}
 
 # Delete last commit(s) with confirmation
 alias deletelastcommit='gitdeletecommit() { \
