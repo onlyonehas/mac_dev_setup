@@ -8,7 +8,9 @@ On many occassions, I had to change laptops, which meant I had to install ALL th
 like **everything** again from scratch.
 
 _So_... wrote this script to automates that process by setting up all the common development tools and configurations for you. 
+
 From installing essential software to configuring your environment, it handles the tedious tasks so you don’t have to. 
+
 Just run the script, and you're good to go!
 
 
