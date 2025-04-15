@@ -82,7 +82,7 @@ gui_apps=(
   "firefox"
   "slack"
   "numi"
-  "zoom.us"
+  "zoom"
   "visual-studio-code"
   "maccy"
   "gpg-suite"
