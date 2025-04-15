@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-# Mac software update 
+# Mac software update
 # softwareupdate --all --install --force
 
-# Xcode https://developer.apple.com/download/all/?q=command%20line%20tools
-# should install git by default
-xcode-select --install
+# Xcode installation (commented out if it's already installed)
+xcode-select --install || echo "Xcode command line tools already installed."
 
 # administrator access
 sudo -v
@@ -13,82 +12,122 @@ sudo -v
 # Keep-alive until the script has finished.
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-# ohmyzsh, zsh-autosuggestions and Zsh-z
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Install Homebrew
-if test ! $(which brew); then
-  echo "Installing homebrew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Install ohmyzsh, zsh-autosuggestions, and Zsh-z
+if ! command -v zsh-autosuggestions &>/dev/null; then
+  echo "Installing zsh-autosuggestions..."
+  brew install zsh-autosuggestions || echo "zsh-autosuggestions already installed."
 fi
 
-# Add homebrew to path
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-z" ]; then
+  echo "Cloning zsh-z plugin..."
+  git clone https://github.com/agkozak/zsh-z ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-z || echo "zsh-z already cloned."
+fi
 
-brew update
+# Install Homebrew if it's not installed
+if ! command -v brew &>/dev/null; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || echo "Homebrew installation failed."
+else
+  echo "Homebrew is already installed."
+fi
 
+# Add Homebrew to path (if not already done)
+if ! grep -q 'eval "$(/opt/homebrew/bin/brew shellenv)"' ~/.zprofile; then
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+  eval "$(/opt/homebrew/bin/brew shellenv)" || echo "Failed to add Homebrew to path."
+else
+  echo "Homebrew already in path."
+fi
 
-brew install zsh-autosuggestions
-git clone https://github.com/agkozak/zsh-z ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-z
+brew update || echo "Failed to update Homebrew."
 
-# nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+# Install essential non-GUI apps if not already installed
+apps=(python starship awscli redis java jq)
+for app in "${apps[@]}"; do
+  if ! brew list "$app" &>/dev/null; then
+    echo "Installing $app..."
+    brew install "$app" || echo "Failed to install $app."
+  else
+    echo "$app is already installed."
+  fi
+done
 
-# essential non-gui apps
-source ~/.zshrc
-nvm install node
-brew install python
-brew install docker
-brew install starship
-brew install awscli
-brew install redis
-brew install java
-brew install jq
-npm i -g np
-npm install -g aws-cdk
+# Install npm packages if not already installed
+npm_packages=(np aws-cdk)
+for pkg in "${npm_packages[@]}"; do
+  if ! npm list -g "$pkg" &>/dev/null; then
+    echo "Installing $pkg..."
+    npm install -g "$pkg" || echo "Failed to install $pkg."
+  else
+    echo "$pkg is already installed."
+  fi
+done
 
-# fonts.
-brew tap bramstein/webfonttools
-brew tap homebrew/cask-fonts
-brew install sfnt2woff
-brew install sfnt2woff-zopfli
-brew install woff2
+# Fonts installation (only if not installed)
+fonts=(sfnt2woff sfnt2woff-zopfli woff2)
+for font in "${fonts[@]}"; do
+  if ! brew list "$font" &>/dev/null; then
+    echo "Installing $font..."
+    brew install "$font" || echo "Failed to install $font."
+  else
+    echo "$font is already installed."
+  fi
+done
 
-# essential apps - gui
-brew install --cask --appdir="/Applications" font-hack-nerd-font
-brew install --cask --appdir="~/Applications" warp
-brew install --cask --appdir="/Applications" google-chrome
-brew install --cask --appdir="/Applications" firefox
-brew install --cask --appdir="/Applications" slack
-brew install --cask --appdir="/Applications" numi
-brew install --cask --appdir="/Applications" zoom.us
-brew install --cask --appdir="/Applications" visual-studio-code
-brew install --cask --appdir="/Applications" maccy
-brew install --cask --appdir="/Applications" gpg-suite
-brew install --cask --appdir="/Applications" flux
-brew install --cask --appdir="/Applications" sublime-text
-brew install --cask --appdir="/Applications" raycast
-brew install --cask --appdir="/Applications" microsoft-outlook
-brew install --cask --appdir="/Applications" postman
+# Install essential GUI apps
+gui_apps=(
+  "font-hack-nerd-font"
+  "warp"
+  "google-chrome"
+  "firefox"
+  "slack"
+  "numi"
+  "zoom.us"
+  "visual-studio-code"
+  "maccy"
+  "gpg-suite"
+  "flux"
+  "sublime-text"
+  "raycast"
+  "microsoft-outlook"
+  "postman"
+  "docker"
+)
 
-brew cleanup
+for app in "${gui_apps[@]}"; do
+  if ! brew list --cask "$app" &>/dev/null; then
+    echo "Installing $app..."
+    brew install --cask --appdir="/Applications" "$app" || echo "Failed to install $app."
+  else
+    echo "$app is already installed."
+  fi
+done
 
-# personal folder structure 
-mkdir ~/sites
+# Cleanup
+brew cleanup || echo "Failed to cleanup Homebrew."
 
-# URL to the raw .zshrc file on GitHub
+# Personal folder structure
+mkdir -p ~/sites || echo "Failed to create ~/sites."
+
+# Download .zshrc from GitHub if not already present
 GITHUB_ZSHRC_URL="https://raw.githubusercontent.com/onlyonehas/mac_dev_setup/main/.zshrc"
-curl -s $GITHUB_ZSHRC_URL >> ~/.zshrc
-# Append the 'eval' line to ~/.zshrc if not already present
-echo 'eval "$(./.zshrc)"' >> ~/.zshrc
-source ~/.zshrc
+if ! curl -s $GITHUB_ZSHRC_URL -o ~/.zshrc; then
+  echo "Failed to download .zshrc."
+else
+  source ~/.zshrc
+  echo ".zshrc successfully updated."
+fi
 
-# URL to the raw starship.toml file on GitHub
-GITHUB_STARSHIP_URL="https://raw.githubusercontent.com/onlyonehas/mac_dev_setup/main/starship.toml"
-mkdir -p ~/.config
-curl -s $GITHUB_STARSHIP_URL -o ~/.config/starship.toml
+# Download and configure starship.toml
+GITHUB_STARSHIP_URL="https://raw.githubusercontent.com/onlyonehas/mac_dev_setup/main/startship.toml"
+mkdir -p ~/.config || echo "Failed to create config directory."
+if ! curl -s $GITHUB_STARSHIP_URL -o ~/.config/starship.toml; then
+  echo "Failed to download starship.toml."
+else
+  echo "starship.toml successfully updated."
+fi
 
+# Uncomment below if needed
 # brew install --cask --appdir="/Applications" cheatsheet
 # brew install --cask --appdir="/Applications" alfred
 # brew install remotemobprogramming/brew/mob
