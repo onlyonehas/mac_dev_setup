@@ -1,18 +1,24 @@
 #!/usr/bin/env bash
 
-# Mac software update
-# softwareupdate --all --install --force
-
-# Xcode installation (commented out if it's already installed)
-xcode-select --install || echo "Xcode command line tools already installed."
-
-# administrator access
+# Prompt for sudo access upfront to avoid multiple prompts later
 sudo -v
 
 # Keep-alive until the script has finished.
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-# Install ohmyzsh, zsh-autosuggestions, and Zsh-z
+# Mac software update (commented out if you don't want it)
+# updates=$(softwareupdate --list 2>&1)
+# if [[ "$updates" != *"No new software available"* ]]; then
+#   echo "Updates available, installing..."
+#   sudo softwareupdate --install --all  
+# else
+#   echo "No updates available, skipping installation."
+# fi
+
+# Xcode installation 
+xcode-select --install || echo "Xcode command line tools already installed."
+
+# Install Oh My Zsh, zsh-autosuggestions, and Zsh-z if not installed
 if ! command -v zsh-autosuggestions &>/dev/null; then
   echo "Installing zsh-autosuggestions..."
   brew install zsh-autosuggestions || echo "zsh-autosuggestions already installed."
@@ -23,7 +29,7 @@ if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-z" ]; then
   git clone https://github.com/agkozak/zsh-z ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-z || echo "zsh-z already cloned."
 fi
 
-# Install Homebrew if it's not installed
+# Install Homebrew if not installed
 if ! command -v brew &>/dev/null; then
   echo "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || echo "Homebrew installation failed."
@@ -52,7 +58,7 @@ for app in "${apps[@]}"; do
   fi
 done
 
-# Install npm packages if not already installed
+# Install npm packages if not already 
 npm_packages=(np aws-cdk)
 for pkg in "${npm_packages[@]}"; do
   if ! npm list -g "$pkg" &>/dev/null; then
@@ -63,7 +69,7 @@ for pkg in "${npm_packages[@]}"; do
   fi
 done
 
-# Fonts installation (only if not installed)
+# Fonts installation 
 fonts=(sfnt2woff sfnt2woff-zopfli woff2)
 for font in "${fonts[@]}"; do
   if ! brew list "$font" &>/dev/null; then
@@ -74,7 +80,7 @@ for font in "${fonts[@]}"; do
   fi
 done
 
-# Install essential GUI apps
+# Install essential GUI apps with check for existing installation in /Applications
 gui_apps=(
   "font-hack-nerd-font"
   "warp"
@@ -95,11 +101,12 @@ gui_apps=(
 )
 
 for app in "${gui_apps[@]}"; do
-  if ! brew list --cask "$app" &>/dev/null; then
+  # Check if the app is already in /Applications or installed by Homebrew
+  if [ -d "/Applications/$app.app" ] || brew list --cask "$app" &>/dev/null; then
+    echo "$app is already installed in /Applications or via Homebrew."
+  else
     echo "Installing $app..."
     brew install --cask --appdir="/Applications" "$app" || echo "Failed to install $app."
-  else
-    echo "$app is already installed."
   fi
 done
 
@@ -109,7 +116,7 @@ brew cleanup || echo "Failed to cleanup Homebrew."
 # Personal folder structure
 mkdir -p ~/sites || echo "Failed to create ~/sites."
 
-# Download .zshrc from GitHub if not already present
+# Download .zshrc from GitHub 
 GITHUB_ZSHRC_URL="https://raw.githubusercontent.com/onlyonehas/mac_dev_setup/main/.zshrc"
 if ! curl -s $GITHUB_ZSHRC_URL -o ~/.zshrc; then
   echo "Failed to download .zshrc."
