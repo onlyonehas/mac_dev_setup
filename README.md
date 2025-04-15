@@ -4,33 +4,34 @@
 
 ## Description
 
-On many occassions, I had to change laptops, which meant
-I had to install ALL the things in the world, 
+On many occassions, I had to change laptops, which meant I had to install ALL the things in the world, 
 like **everything** again from scratch.
 
-_So_... wrote this basic script to automate the process.
+_So_... wrote this script to automates that process by setting up all the common development tools and configurations for you. 
+From installing essential software to configuring your environment, it handles the tedious tasks so you don’t have to. 
+Just run the script, and you're good to go!
 
-## Prerequisite
-
-Install x-code which contains dev env for mac
-
-> https://developer.apple.com/download/all/?q=command%20line%20tools
-
----
 
 # How to run the script
 
 ```
-chmod 755 setup.sh
-./setup.sh
+GITHUB_SETUP_URL="https://raw.githubusercontent.com/onlyonehas/mac_dev_setup/main/setup.sh"
 
+# Download the setup.sh script from GitHub
+curl -O $GITHUB_SETUP_URL
+
+# Make the setup.sh script executable
+chmod 755 setup.sh
+
+# Run the setup.sh script
+./setup.sh
 
 ```
 
 ## Still TO DO:
-
+- [ ] Update dynamically from cloud 
 - [ ] Automate dot files
-- [ ] Store secrets ie .aws, cers
+- [ ] Secure secrets ie .aws, certs
 - [ ] Hidden script to move/apply secrets
 - [ ] Settings for vscode
 - [ ] Alfred shortcuts 
@@ -44,37 +45,46 @@ You can turn on Settings Sync using the Turn On Settings Sync... entry in the Ma
 
 > https://code.visualstudio.com/docs/editor/settings-sync
 
-### To add in `.zshrc`
-
-```
-plugins=(z, zsh-autosuggestions)
-eval "$(starship init zsh)"
-```
-
----
 
 ## Github machine setup
+```
+# Generate SSH Key if not already present
+echo "Checking for existing SSH key..."
 
-### SSH:
+if [ ! -f "$HOME/.ssh/id_rsa" ]; then
+  echo "No SSH key found. Generating new SSH key..."
+  ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f "$HOME/.ssh/id_rsa" -N ""
+else
+  echo "SSH key already exists."
+fi
 
-To Generate an SSH key:
-
-````  
-ssh-keygen
+# Copy the SSH public key to clipboard (macOS only, adjust for other OS if needed)
+echo "Copying SSH public key to clipboard..."
 cat ~/.ssh/id_rsa.pub | pbcopy
-```  
+echo "SSH public key copied to clipboard. Add it to your GitHub account."
 
-### GPG:
+# Generate GPG Key
+echo "Checking for existing GPG key..."
 
-If you are on version 2.1.17 or greater, paste the text below to generate a GPG key pair.
+GPG_KEY=$(gpg --list-secret-keys --keyid-format LONG | grep sec | head -n 1 | awk -F/ '{print $2}' | tr -d ' ')
 
-    gpg --full-generate-key
+if [ -z "$GPG_KEY" ]; then
+  echo "No GPG key found. Generating new GPG key..."
+  gpg --full-generate-key
+else
+  echo "GPG key already exists."
+fi
 
-Use the gpg --list-secret-keys --keyid-format=long command to list the long form of the GPG keys
+# List the GPG key ID
+GPG_KEY=$(gpg --list-secret-keys --keyid-format LONG | grep sec | head -n 1 | awk -F/ '{print $2}' | tr -d ' ')
 
-    gpg --list-secret-keys --keyid-format=long
+echo "Listing GPG key ID..."
+echo "Your GPG key ID is: $GPG_KEY"
 
-Copy Id after the `sec 4096R/`
+# Export GPG Key to clipboard
+echo "Exporting GPG key to clipboard..."
+gpg --armor --export $GPG_KEY | pbcopy
+echo "GPG key exported to clipboard. Add it to your GitHub account."
 
-    gpg --armor --export **GPG key ID**
-````
+echo "GitHub machine setup complete! Add your SSH and GPG keys to your GitHub account."
+```
