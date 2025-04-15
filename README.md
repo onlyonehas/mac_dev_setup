@@ -26,7 +26,7 @@ curl -O $GITHUB_SETUP_URL
 chmod 755 setup.sh
 
 # Run the setup.sh script
-./setup.sh
+zsh ./setup.sh
 
 ```
 
