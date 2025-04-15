@@ -1,4 +1,5 @@
 # ~/.config/starship.toml
+command_timeout = 2000
 
 [battery]
 full_symbol = "🔋"
@@ -32,16 +33,16 @@ style = "bold white"
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
 
 [git_status]
-conflicted = "⚔️ "
+conflicted = "⛔️ "
 ahead = "🏎️ 💨 ×${count}"
 behind = "🐢 ×${count}"
 diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count}"
-untracked = "🛤️  ×${count}"
+untracked = "🛤️ ×${count}"
 stashed = "📦 "
-modified = "📝 ×${count}"
-staged = "🗃️  ×${count}"
-renamed = "📛 ×${count}"
-deleted = "🗑️  ×${count}"
+modified = "❗️×${count}"
+staged = "🗃️×${count}"
+renamed = "📛×${count}"
+deleted = "🗑️×${count}"
 style = "bright-white"
 format = "$all_status$ahead_behind"
 
@@ -52,12 +53,6 @@ trim_at = "-"
 style = "bold dimmed white"
 disabled = true
 
-[memory_usage]
-format = "$symbol[${ram}( | ${swap})]($style) "
-threshold = 70
-style = "bold dimmed white"
-disabled = false
-
 [package]
 format = '[$symbol$version]($style)'
 disabled = true
@@ -67,8 +62,7 @@ format = "[$symbol$version]($style) "
 style = "bold green"
 
 [rust]
-format = "[$symbol]($style) "
-style = "bold green"
+disabled = true
 
 [time]
 time_format = "%T"
@@ -81,13 +75,10 @@ style_user = "bold dimmed blue"
 show_always = false
 
 [dotnet]
-format = '[$symbol($version)(🎯 $tfm)]($style)'
+disabled = true
 
 [nodejs]
 format = '[$symbol($version)]($style)'
 
 [aws]
 format = '[$symbol($profile)(\($region\))(\[$duration\])]($style)'
-
-[c]
-format = '[$symbol($version(-$name))]($style)'
