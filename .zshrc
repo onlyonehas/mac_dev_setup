@@ -1,6 +1,3 @@
-# Fig pre block. Keep at the top of this file.
-. "$HOME/.fig/shell/zshrc.pre.zsh"
-
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
@@ -141,6 +138,3 @@ PATH="$HOME/sites/bashfiles/:$PATH"
 
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
 export GPG_TTY=$(tty)
-
-# Fig post block. Keep at the bottom of this file.
-. "$HOME/.fig/shell/zshrc.post.zsh"
